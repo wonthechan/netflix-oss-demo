@@ -3,12 +3,14 @@ package com.example.userconsumer;
 import com.example.userconsumer.controller.ConsumerControllerClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import java.io.IOException;
 
 @SpringBootApplication
+@EnableCircuitBreaker
 public class UserConsumerApplication {
 
 	public static void main(String[] args) throws IOException {
@@ -17,7 +19,7 @@ public class UserConsumerApplication {
 
 		ConsumerControllerClient consumerControllerClient = ctx.getBean(ConsumerControllerClient.class);
 		System.out.println(consumerControllerClient);
-		consumerControllerClient.getUser();
+		consumerControllerClient.getUser("user");
 	}
 
 	@Bean
