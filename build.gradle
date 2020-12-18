@@ -1,0 +1,82 @@
+buildscript {
+    // 나머지 스크립트를 빌드하는 과정에서 필요한 외부 라이브러리를 classpath에 추가하는 기능을 담당합니다. subprojects 내에서 플러그인 적용(apply plugin)이 가능한 이유 또한 buildscript를 통해 라이브러리를 classpath에 추가시켰기 때문입니다.
+    ext {
+        springBootVersion = '2.3.7.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.10.RELEASE"
+    }
+}
+
+allprojects {
+    // root 프로젝트(demo)와 하위 프로젝트(command, query, common)에 모두 적용되는 빌드 스크립트 기준을 작성합니다.
+    group 'com.example'
+    version '0.0.1-SNAPSHOT'
+}
+
+subprojects {
+    // 하위 프로젝트(command, query, common)에만 적용되는 빌드 스크립트 기준을 작성합니다.
+    /*
+        sourceCompatibility : java 버전을 명시합니다.
+        repositories : 저장소 설정을 담당합니다.
+        initSourceFolders task : sub module별로 기초 디렉터리가 존재하지 않으면, 자동 생성해주도록 설정합니다.
+     */
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
+
+    ext {
+        set('springCloudVersion', "Hoxton.SR9")
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+
+    task initSourceFolders {
+        sourceSets*.java.srcDirs*.each {
+            if (!it.exists()) {
+                it.mkdirs()
+            }
+        }
+        sourceSets*.resources.srcDirs*.each {
+            if (!it.exists()) {
+                it.mkdirs()
+            }
+        }
+    }
+}
+
+project(':user-producer') {
+    //  Command, Query App은 빌드시에 공통 모듈(Common)이 포함되어야 함으로 빌드시에 추가하도록 설정합니다.
+    //  (※ : 가 들어간 이유는 Root 프로젝트 기준으로 각 모듈은 한단계 아래 계층에 존재하기 때문에 이를 구별하기 위함입니다.)
+    dependencies {
+//        compile project(':eureka-server')
+    }
+}
+
+project(':user-consumer') {
+    dependencies {
+//        compile project(':user-producer')
+    }
+}
