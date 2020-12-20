@@ -50,6 +50,7 @@ public class ConsumerControllerClient {
 
         if (response.getStatusCode() == HttpStatus.OK) {
             System.out.println(response.getBody());
+            return;
         }
 
         throw new RuntimeException("producer emitted error while responding");
