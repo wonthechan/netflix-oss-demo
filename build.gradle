@@ -41,7 +41,6 @@ subprojects {
 
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
             exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
@@ -67,16 +66,49 @@ subprojects {
     }
 }
 
+project(':eureka-server') {
+    dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+    }
+}
+
 project(':user-producer') {
     //  Command, Query App은 빌드시에 공통 모듈(Common)이 포함되어야 함으로 빌드시에 추가하도록 설정합니다.
     //  (※ : 가 들어간 이유는 Root 프로젝트 기준으로 각 모듈은 한단계 아래 계층에 존재하기 때문에 이를 구별하기 위함입니다.)
     dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 //        compile project(':eureka-server')
     }
 }
 
 project(':user-consumer') {
     dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-ribbon' // to add Ribbon (load balancing)
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'// to add Hystrix (circuit breaker)
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
 //        compile project(':user-producer')
+    }
+}
+
+project(':user-consumer-another') {
+    dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-ribbon' // to add Ribbon (load balancing)
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'// to add Hystrix (circuit breaker)
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    }
+}
+
+project(':hystrix-monitor') {
+    dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard' // to add Hystrix Monitoring service
+    }
+}
+
+project(':hystrix-turbine') {
+    dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+        implementation('org.springframework.cloud:spring-cloud-starter-netflix-turbine')
     }
 }

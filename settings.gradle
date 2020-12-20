@@ -1,4 +1,7 @@
 rootProject.name = 'eureka-demo'
 include 'user-producer'
 include 'user-consumer'
+include 'user-consumer-another'
 include 'eureka-server'
+include 'hystrix-monitor'
+include 'hystrix-turbine'

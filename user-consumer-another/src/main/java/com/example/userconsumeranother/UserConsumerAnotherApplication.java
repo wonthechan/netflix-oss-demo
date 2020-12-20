@@ -1,6 +1,6 @@
-package com.example.userconsumer;
+package com.example.userconsumeranother;
 
-import com.example.userconsumer.controller.ConsumerControllerClient;
+import com.example.userconsumeranother.controller.ConsumerControllerClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -11,11 +11,11 @@ import java.io.IOException;
 
 @SpringBootApplication
 @EnableCircuitBreaker
-public class UserConsumerApplication {
+public class UserConsumerAnotherApplication {
 
 	public static void main(String[] args) throws IOException {
 		ApplicationContext ctx = SpringApplication.run(
-				UserConsumerApplication.class, args);
+				UserConsumerAnotherApplication.class, args);
 
 		ConsumerControllerClient consumerControllerClient = ctx.getBean(ConsumerControllerClient.class);
 		System.out.println(consumerControllerClient);

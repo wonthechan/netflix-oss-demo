@@ -1,13 +1,11 @@
-package com.example.userconsumer.controller;
+package com.example.userconsumeranother.controller;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.*;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +13,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 public class ConsumerControllerClient {
@@ -23,7 +20,7 @@ public class ConsumerControllerClient {
     @Autowired
     private LoadBalancerClient loadBalancerClient; // for load balancer
 
-    @GetMapping("/eureka/client/{path}")
+    @GetMapping("/eureka/client/v2/{path}")
     @HystrixCommand(fallbackMethod = "fallback", commandProperties = {
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000"),
             @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "10000"),
