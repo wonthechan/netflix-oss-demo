@@ -93,6 +93,13 @@ project(':user-consumer') {
 
 project(':hystrix-monitor') {
     dependencies {
-        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard'
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard' // to add Hystrix Monitoring service
+    }
+}
+
+project(':hystrix-turbine') {
+    dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+        implementation('org.springframework.cloud:spring-cloud-starter-netflix-turbine')
     }
 }
