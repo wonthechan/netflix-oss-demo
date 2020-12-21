@@ -9,10 +9,12 @@ eureka:
   client:
     service-url:
       default-zone: http://localhost:8761/eureka
+
 zuul:
-  ignored-services: '*' # routes¿¡ Á¤ÀÇµÇÁö ¾ÊÀº ¸ğµç ¿äÃ»Àº ¹«½Ã
+  ignored-services: '*'         # routesì— ì •ì˜ë˜ì§€ ì•Šì€ ëª¨ë“  ìš”ì²­ì€ ë¬´ì‹œ
+  prefix: /api/v1               # routesì— ì •ì˜ëœ ëª¨ë“  ì„œë¹„ìŠ¤ì˜ ì—”ë“œí¬ì¸íŠ¸ë¥¼ /api/v1/~ ìœ¼ë¡œ ë¬¶ìŒ
   routes:
     user-producer:
-      path: /api/v1/prod/**     # »ç¿ëÀÚ°¡ ÀÔ·ÂÇÒ url
-      service-id: USER-PRODUCER # routingÀ» Ã³¸®ÇÒ ¿£µåÆ÷ÀÎÆ® ¼­ºñ½º
-      strip-prefix: true        # path¿¡¼­ /** ¾ÕÀÇ °æ·Î´Â Á¦°Å ÈÄ µŞ´Ü ¼­ºñ½º·Î ¿äÃ» ÇÔ
+      path: /prod/**            # ì‚¬ìš©ìê°€ ì…ë ¥í•  url
+      service-id: user-producer # routingì„ ì²˜ë¦¬í•  ì—”ë“œí¬ì¸íŠ¸ ì„œë¹„ìŠ¤ (ì•„ë˜ì—ì„œ ì •ì˜) - ë¡œë“œë°¸ëŸ°ì‹±ì„ ìœ„í•´ urlì´ ì•„ë‹Œ service-idë¥¼ ì ëŠ”ë‹¤.
+      strip-prefix: true        # pathì—ì„œ /** ì•ì˜ ê²½ë¡œëŠ” ì œê±° í›„ ë’·ë‹¨ ì„œë¹„ìŠ¤ë¡œ ìš”ì²­ í•¨

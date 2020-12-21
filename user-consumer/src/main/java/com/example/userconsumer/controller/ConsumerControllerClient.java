@@ -5,7 +5,6 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +20,7 @@ import java.util.List;
 public class ConsumerControllerClient {
 
     @Autowired
-    private LoadBalancerClient loadBalancerClient; // for load balancer
+    private DiscoveryClient discoveryClient;
 
     @GetMapping("/eureka/client/{path}")
     @HystrixCommand(fallbackMethod = "fallback", commandProperties = {
@@ -33,8 +32,10 @@ public class ConsumerControllerClient {
     }, threadPoolProperties = @HystrixProperty(name = "coreSize", value = "100"))
     public void getUser(@PathVariable String path) throws RestClientException, IOException {
 
-        ServiceInstance serviceInstance = loadBalancerClient.choose("user-producer"); // for load balancer
-        String baseUrl = serviceInstance.getUri().toString() + "/" + path;
+        List<ServiceInstance> instances = discoveryClient.getInstances("zuul-gateway");
+        ServiceInstance serviceInstance = instances.get(0);
+
+        String baseUrl = serviceInstance.getUri().toString() + "/api/v1/prod/" + path;
         System.out.println("baseUrl: " + baseUrl);
 
         RestTemplate restTemplate = new RestTemplate();
